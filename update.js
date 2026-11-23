@@ -36,6 +36,11 @@ const recent = await fetch("https://ws.audioscrobbler.com/2.0/?" + params).then(
 if (!recent.recenttracks) throw new Error("Last.fm error: " + JSON.stringify(recent));
 
 const tracks = [].concat(recent.recenttracks.track || []);
+console.log("Your 8 most recent scrobbles (newest first):");
+tracks.slice(0, 8).forEach(t => {
+  console.log(`  ${isSad(t.name, t.artist["#text"]) ? "MATCH" : "no   "}  ${t.artist["#text"]} - ${t.name}`);
+});
+
 const hit = tracks.find(t => isSad(t.name, t.artist["#text"]));
 if (!hit) { console.log("No sad song in your last 200 scrobbles; leaving sad.json as is."); process.exit(0); }
 
